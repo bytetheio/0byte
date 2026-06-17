@@ -113,7 +113,7 @@ john --format=raw-md5 -w $ROCKYOU /lab/sample-hashes/c1_md5.txt
 john --show --format=raw-md5 /lab/sample-hashes/c1_md5.txt
 # -> recover the password, wrap it as DC256{...}, submit it at board.0byte.sh</pre>
     <p>For the C9 web challenge (Dillon's Cookie Shop), use the internet-enabled toolbox:</p>
-<pre>docker compose run --rm crackstation-web
+<pre>docker compose run --rm crackstation
 hydra -l dillon -P /lab/wordlists/cookie-wordlist.txt cookies.0byte.sh -s 443 \
   https-post-form "/login:username=^USER^&password=^PASS^:F=Invalid credentials"</pre>
   </section>

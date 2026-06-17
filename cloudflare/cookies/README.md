@@ -37,7 +37,7 @@ npx wrangler deploy     # -> cookies.0byte.sh
 
 Attack it from the lab (the internet-enabled toolbox):
 ```bash
-docker compose run --rm crackstation-web
+docker compose run --rm crackstation
 hydra -l dillon -P /lab/wordlists/cookie-wordlist.txt cookies.0byte.sh -s 443 \
   https-post-form "/login:username=^USER^&password=^PASS^:F=Invalid credentials"
 ```
