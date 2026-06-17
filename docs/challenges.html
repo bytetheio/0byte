@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Challenge Ladder — Hash Heist · DC256 × NAC-ISSA</title>
+<style>
+  :root{--green:#5FE085;--green-bright:#7CFFA0;--teal:#31A7CC;--gold:#E0A93B;
+        --ink:#0B0E14;--panel:#161B26;--cloud:#F4F7FB;--muted:#9AA4B8;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--cloud);font-family:Inter,Segoe UI,system-ui,sans-serif;line-height:1.55}
+  a{color:var(--green)}
+  header{padding:1.5rem 1.25rem;border-bottom:2px solid var(--green);background:#0d111a}
+  header h1{margin:0;font-size:1.5rem}.accent{color:var(--green)}
+  header .brand{color:var(--muted);font-size:.85rem}
+  main{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 3rem}
+  .nav a{margin-right:1rem;font-size:.9rem}
+  table.ladder{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.9rem}
+  table.ladder th,table.ladder td{text-align:left;padding:.5rem .55rem;border-bottom:1px solid #232a3a}
+  table.ladder th{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+  td.id{color:var(--gold);font-weight:700;white-space:nowrap}
+  td.pts{color:var(--green);font-weight:700;text-align:right}
+  code{background:#0d111a;border:1px solid #2c3548;border-radius:5px;padding:1px 5px;font-family:Consolas,monospace;color:var(--green-bright);font-size:.85em}
+  .chal{background:var(--panel);border:1px solid #232a3a;border-radius:12px;padding:1rem 1.25rem;margin:.9rem 0}
+  .chal h3{margin:.1rem 0;color:var(--green-bright);font-size:1.05rem}
+  .chal .meta{color:var(--gold);font-size:.8rem;margin-bottom:.5rem}
+  .chal p{margin:.4rem 0}
+  .hints{color:var(--muted);font-size:.85rem;margin:.3rem 0 0;padding-left:1.1rem}
+  .hints li{margin:.15rem 0}
+  .banner{background:#1a1407;border:1px solid var(--gold);color:var(--gold);border-radius:10px;padding:.7rem 1rem;font-size:.85rem;margin:1rem 0}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;padding:2rem;border-top:1px solid #232a3a}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="accent">#</span> Hash Heist — Challenge Ladder</h1>
+  <div class="brand">DC256 × NAC-ISSA · climb from Script Kiddie to Hash Lord</div>
+</header>
+<main>
+  <p class="nav">
+    <a href="index.html">← Home</a>
+    <a href="https://board.0byte.sh/">🏆 Live Leaderboard</a>
+    <a href="scoreboard.html">🧪 Practice Board</a>
+    <a href="https://cookies.0byte.sh/">🍪 Cookie Shop</a>
+  </p>
+
+  <p>Crack a hash → recover the password → that's your flag. Submit it as
+  <code>DC256{the_password}</code> on the <a href="https://board.0byte.sh/">live leaderboard</a>.
+  Hints cost points (shown below) — but learning beats hoarding points.</p>
+
+  <div class="banner">⚖️ Lab only. Every hash here is synthetic toy data. Don't take these techniques outside the lab.</div>
+
+  <table class="ladder">
+    <thead><tr><th>#</th><th>Name</th><th>Level</th><th>Target</th><th>Pts</th><th>Core skill</th></tr></thead>
+    <tbody>
+      <tr><td class="id">C1</td><td>First Blood</td><td>⭐</td><td><code>c1_md5.txt</code></td><td class="pts">50</td><td>Identify + dictionary</td></tr>
+      <tr><td class="id">C1B</td><td>Hidden in Plain Sight</td><td>⭐</td><td><code>b1_base64.txt</code></td><td class="pts">25</td><td>Encoding ≠ hashing</td></tr>
+      <tr><td class="id">C2</td><td>Old Faithful</td><td>⭐</td><td><code>c2_sha1.txt</code></td><td class="pts">50</td><td>Pick the right format</td></tr>
+      <tr><td class="id">C2B</td><td>Cindy's Clever Trick</td><td>⭐⭐</td><td><code>c2b_md5.txt</code></td><td class="pts">75</td><td>Mutation (base word + a rule)</td></tr>
+      <tr><td class="id">C3</td><td>Season's Greetings</td><td>⭐⭐</td><td><code>c3_md5.txt</code></td><td class="pts">100</td><td>Rule-based attack</td></tr>
+      <tr><td class="id">C4</td><td>No Dictionary Here</td><td>⭐⭐⭐</td><td><code>c4_md5.txt</code></td><td class="pts">150</td><td>Mask / smart brute force</td></tr>
+      <tr><td class="id">C5</td><td>Insider Knowledge</td><td>⭐⭐⭐</td><td><code>c5_md5.txt</code></td><td class="pts">200</td><td>Custom wordlist (CeWL) + hybrid</td></tr>
+      <tr><td class="id">C6</td><td>Front Door</td><td>⭐⭐⭐</td><td><code>ssh://vuln-login</code></td><td class="pts">150</td><td>Online guessing (Hydra)</td></tr>
+      <tr><td class="id">C7</td><td>Slow Burn</td><td>⭐⭐⭐⭐</td><td><code>c7_bcrypt.txt</code></td><td class="pts">250</td><td>Slow hash; why cost matters</td></tr>
+      <tr><td class="id">C8</td><td>Windows Pivot</td><td>⭐⭐⭐⭐</td><td><code>c8_ntlm.txt</code></td><td class="pts">250</td><td>NTLM, unsalted, AD relevance</td></tr>
+      <tr><td class="id">C9</td><td>Dillon's Cookie Shop</td><td>⭐⭐⭐</td><td><code>cookies.0byte.sh</code></td><td class="pts">200</td><td>HTTP POST-form brute force</td></tr>
+      <tr><td class="id">🎁</td><td>Defender's Gambit</td><td>Bonus</td><td>write-up</td><td class="pts">100</td><td>Map a defense to each attack</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--muted);font-size:.85rem">Hash files live in <code>/lab/sample-hashes/</code> inside the
+  <code>crackstation</code> container. <code>$ROCKYOU</code> points at rockyou; rules are in <code>/lab/rules/class.rule</code>.</p>
+
+  <h2 style="color:var(--teal)">The challenges</h2>
+
+  <div class="chal"><h3>C1 — First Blood</h3><div class="meta">⭐ Warm-up · 50 pts</div>
+    <p>Identify an unknown hash, then crack it with a wordlist.</p>
+    <ul class="hints"><li>(−5) "Identify before you crack."</li><li>(−10) "It's MD5, 32 hex chars."</li><li>(−15) "The password is the most clichéd one there is."</li></ul></div>
+
+  <div class="chal"><h3>C1B — Hidden in Plain Sight</h3><div class="meta">⭐ Warm-up · 25 pts</div>
+    <p>This one <em>looks</em> scrambled but it's a reversible <strong>encoding</strong>, not a one-way hash. You don't crack it — you decode it.</p>
+    <ul class="hints"><li>(−5) "This isn't a hash — notice the <code>==</code> at the end."</li><li>(−10) "It's Base64."</li><li>(−15) "Decode it with <code>base64 -d</code>."</li></ul></div>
+
+  <div class="chal"><h3>C2 — Old Faithful</h3><div class="meta">⭐ Warm-up · 50 pts</div>
+    <p>Not everything is MD5. Count the characters and choose the right format/mode.</p>
+    <ul class="hints"><li>(−5) "Count the characters: 40, not 32."</li><li>(−10) "SHA-1."</li><li>(−15) "A very loving 2009 password."</li></ul></div>
+
+  <div class="chal"><h3>C2B — Cindy's Clever Trick</h3><div class="meta">⭐⭐ Easy · 75 pts</div>
+    <p>Story: <em>"Cindy's former password was compromised, so she added an <code>!1</code> to it, thinking it was smart."</em> A plain wordlist won't match a word she <em>changed</em> — you have to mutate each candidate (hybrid or a rule).</p>
+    <ul class="hints"><li>(−5) "Read <code>c2b_README.txt</code>."</li><li>(−10) "Her old password is common — she just glued <code>!1</code> on the end."</li><li>(−15) "Hybrid: append <code>!1</code> to each rockyou word."</li></ul></div>
+
+  <div class="chal"><h3>C3 — Season's Greetings</h3><div class="meta">⭐⭐ Easy · 100 pts</div>
+    <p>Plain rockyou misses it. Rules mutate words into real-world variants (capital + year suffix).</p>
+    <ul class="hints"><li>(−10) "The base word is a season."</li><li>(−15) "Capital letter + a recent year."</li><li>(−20) "Apply <code>class.rule</code> (or best64)."</li></ul></div>
+
+  <div class="chal"><h3>C4 — No Dictionary Here</h3><div class="meta">⭐⭐⭐ Medium · 150 pts</div>
+    <p>This password isn't in any wordlist — brute force a <strong>known shape</strong> with a mask.</p>
+    <ul class="hints"><li>(−10) "No wordlist will contain this. Think structure."</li><li>(−20) "4 characters."</li><li>(−30) "Mask <code>?u?l?d?l</code>."</li></ul></div>
+
+  <div class="chal"><h3>C5 — Insider Knowledge</h3><div class="meta">⭐⭐⭐ Medium · 200 pts</div>
+    <p>The password is company jargon. Build a custom wordlist from the target's own words (CeWL), then hybrid it. The company intranet is served at <code>http://127.0.0.1:8000/intranet.html</code> inside the container.</p>
+    <ul class="hints"><li>(−15) "Generic lists fail; the password is company jargon."</li><li>(−25) "Spider the local intranet page with CeWL."</li><li>(−35) "CeWL → custom list, then append four digits."</li></ul></div>
+
+  <div class="chal"><h3>C6 — Front Door</h3><div class="meta">⭐⭐⭐ Medium · 150 pts</div>
+    <p>This isn't a hash — it's a live SSH login. Online guessing with Hydra against a service you own (<code>ssh://vuln-login</code>). Notice how slow and noisy it is vs. offline cracking.</p>
+    <ul class="hints"><li>(−10) "This isn't a hash — it's a live login."</li><li>(−20) "User is <code>labuser</code>."</li><li>(−30) "Hydra + a tiny wordlist over SSH."</li></ul></div>
+
+  <div class="chal"><h3>C7 — Slow Burn</h3><div class="meta">⭐⭐⭐⭐ Hard · 250 pts</div>
+    <p>Same rockyou attack as C1, but against a <strong>slow hash</strong>. Feel why key stretching changes everything — compare your hashes/sec to C1.</p>
+    <ul class="hints"><li>(−20) "<code>$2b$</code> = bcrypt."</li><li>(−30) "Same wordlist as C1 — just be patient; that's the point."</li><li>(−40) "<code>hashcat -m 3200</code>."</li></ul></div>
+
+  <div class="chal"><h3>C8 — Windows Pivot</h3><div class="meta">⭐⭐⭐⭐ Hard · 250 pts</div>
+    <p>32 hex chars, but it's <strong>not</strong> MD5 — it's how Windows stores passwords (NTLM). Unsalted ⇒ identical passwords produce identical hashes, and it cracks fast. Crack with rockyou + rules.</p>
+    <ul class="hints"><li>(−20) "32 hex chars but NOT MD5 — it's how Windows stores passwords."</li><li>(−30) "NTLM, hashcat mode 1000 / <code>john --format=nt</code>."</li><li>(−40) "rockyou + <code>class.rule</code> (capitalize + append digits)."</li></ul></div>
+
+  <div class="chal"><h3>C9 — Dillon's Cookie Shop</h3><div class="meta">⭐⭐⭐ Bonus · 200 pts · <a href="https://cookies.0byte.sh/">cookies.0byte.sh</a></div>
+    <p>A cute bakery site with a deliberately weak <strong>staff login</strong>. Brute-force the HTTP POST form with Hydra (<code>http[s]-post-form</code>), then log in to reveal the recipe and the flag. The failure message <code>Invalid credentials</code> is your marker. Use the internet-enabled toolbox: <code>docker compose run --rm crackstation-web</code>.</p>
+    <ul class="hints"><li>"Username is <code>dillon</code>."</li><li>"The password is a cookie-themed dictionary word — try the bundled <code>cookie-wordlist.txt</code>."</li><li>"Form posts to <code>/login</code> with fields <code>username</code> / <code>password</code>; failure marker is <code>Invalid credentials</code>."</li></ul></div>
+
+  <div class="chal"><h3>🎁 Defender's Gambit</h3><div class="meta">Bonus · 100 pts · write-up</div>
+    <p>Flip attacker → defender. In a few sentences, name the <strong>defense</strong> that beats each attack you used (fast-hash dump, rules/dictionary, mask, custom wordlist, online guessing, NTLM). Cite one NIST or OWASP point. Judged by the instructor.</p></div>
+
+  <p style="color:var(--muted);font-size:.85rem">Max base points: <strong>1500</strong> (C1–C9 + C1B + C2B). Plus the Defender's Gambit bonus (+100).</p>
+</main>
+<footer>Hash Heist · DC256 × NAC-ISSA · Tech Thursdays · <a href="https://github.com/bytetheio/crackstation">the lab on GitHub</a></footer>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hash Heist — Scoreboard · DC256 × NAC-ISSA</title>
+<style>
+  :root{
+    --green:#5FE085; --green-bright:#7CFFA0; --teal:#1C7FA0; --gold:#E0A93B;
+    --ink:#0B0E14; --panel:#161B26; --cloud:#F4F7FB; --danger:#E5484D; --muted:#8b94a7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--cloud);
+       font-family:Inter,Segoe UI,system-ui,sans-serif;line-height:1.5}
+  header{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+         padding:1rem 1.5rem;border-bottom:2px solid var(--green);background:#0d111a}
+  header h1{font-size:1.4rem;margin:0;letter-spacing:.5px}
+  header h1 .accent{color:var(--green)}
+  header .brand{font-size:.8rem;color:var(--muted)}
+  main{max-width:1000px;margin:0 auto;padding:1.5rem}
+  .card{background:var(--panel);border:1px solid #232a3a;border-radius:12px;
+        padding:1.25rem;margin-bottom:1.25rem}
+  h2{margin:.2rem 0 1rem;font-size:1.05rem;color:var(--teal)}
+  label{display:block;font-size:.8rem;color:var(--muted);margin:.5rem 0 .25rem}
+  input,select{width:100%;padding:.6rem .7rem;border-radius:8px;border:1px solid #2c3548;
+        background:#0d111a;color:var(--cloud);font-size:1rem;font-family:inherit}
+  .row{display:flex;gap:1rem;flex-wrap:wrap}
+  .row>div{flex:1;min-width:180px}
+  button{margin-top:1rem;padding:.65rem 1.2rem;border:none;border-radius:8px;
+        background:var(--green);color:#04210f;font-weight:700;font-size:1rem;cursor:pointer}
+  button.secondary{background:transparent;color:var(--cloud);border:1px solid #2c3548}
+  button:hover{filter:brightness(1.08)}
+  .msg{margin-top:.8rem;font-weight:600;min-height:1.2rem}
+  .ok{color:var(--green-bright)} .err{color:var(--danger)} .info{color:var(--gold)}
+  table{width:100%;border-collapse:collapse;margin-top:.5rem}
+  th,td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid #232a3a}
+  th{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px}
+  td.pts{font-weight:700;color:var(--green)}
+  tr.me{background:rgba(95,224,133,.08)}
+  .rank{color:var(--gold);font-weight:700}
+  .pill{display:inline-block;font-size:.7rem;padding:.1rem .5rem;border-radius:999px;
+        background:#0d111a;border:1px solid #2c3548;color:var(--muted);margin-right:.25rem}
+  .solved{color:var(--green);border-color:var(--green)}
+  footer{color:var(--muted);font-size:.75rem;text-align:center;padding:1.5rem}
+  .toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+  .big{font-size:2.2rem}
+  @media(max-width:600px){header h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="accent">#</span> Hash Heist <span class="accent">// Scoreboard</span></h1>
+  <div class="brand">DC256 × NAC-ISSA · Tech Thursdays</div>
+</header>
+
+<main>
+  <div class="card">
+    <h2>Submit a flag</h2>
+    <div class="row">
+      <div>
+        <label for="player">Your name / team</label>
+        <input id="player" placeholder="e.g. team-redstone" autocomplete="off">
+      </div>
+      <div>
+        <label for="flag">Flag</label>
+        <input id="flag" placeholder="DC256{...}" autocomplete="off">
+      </div>
+    </div>
+    <div class="toolbar">
+      <button id="submit">Submit flag</button>
+      <button class="secondary" id="projector">📺 Projector mode</button>
+      <button class="secondary" id="export">⬇ Export CSV</button>
+      <button class="secondary" id="reset">♻ Reset board</button>
+    </div>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <div class="card">
+    <h2>Leaderboard</h2>
+    <table id="board">
+      <thead><tr><th>#</th><th>Player / Team</th><th>Solved</th><th>Points</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <b>Solo / practice mode.</b> Runs entirely in your browser (localStorage) — scores are NOT shared
+  between devices. Great for self-practice or one shared "scoreboard laptop" people walk up to.
+  <br>For the LIVE shared leaderboard the whole room submits to, go to <b><a href="https://board.0byte.sh/">board.0byte.sh</a></b>.
+  <br>⚖️ Lab only. Flags are checked against SHA-256 digests so answers aren't in the page source.
+</footer>
+
+<script>
+// ---- challenge metadata: points + SHA-256(flag) ----
+const CHALLENGES = {
+  C1:{pts:50,  name:"First Blood"},
+  C1B:{pts:25, name:"Hidden in Plain Sight"},
+  C2:{pts:50,  name:"Old Faithful"},
+  C2B:{pts:75, name:"Cindy's Clever Trick"},
+  C3:{pts:100, name:"Season's Greetings"},
+  C4:{pts:150, name:"No Dictionary Here"},
+  C5:{pts:200, name:"Insider Knowledge"},
+  C6:{pts:150, name:"Front Door"},
+  C7:{pts:250, name:"Slow Burn"},
+  C8:{pts:250, name:"Windows Pivot"},
+  C9:{pts:200, name:"Dillon's Cookie Shop"}
+};
+const FLAG_HASHES = {
+  "C1":"b77e93d3c50db5e0328170e5490f9ca37b8f0a7bf7869060437f0c6bfd899961",
+  "C1B":"7ad35dabe7ed3df31345ac3a3965ec302c2f367fb00bcbf5bdd717ff439cdcc3",
+  "C2":"aeb57d3585eba135615416c73be5965eed791626e3086396e2da5748c06ab7ce",
+  "C2B":"e0766e69f796dada7c859547b3f6fce51e95a3a039102baadb0e7adda886f3c1",
+  "C3":"7c399edfa85293b2b3e33f6f90426873bc842f2b28fda7f5ba4cfd7caac91572",
+  "C4":"bf7dc89dc342db86db91cfb902edf00970f0ce8cecf997980f3635b793333b01",
+  "C5":"0227018c2a6b87d1ccb8a2a6558db980c8be226accb6a55382e8cde175c00fcb",
+  "C6":"4d6f62209b91179755e5f960e1f7216bbd41620e5a386e81878842f25428feca",
+  "C7":"fdfe1d8fefd0e7159bef0ee32a61160b9e8d46c01fe3fe00bea6e56742ec17fc",
+  "C8":"6ab9ed15b7eb1786f15be84d27ea0fd2f522ba2ba2f8865b7396372772b77c03",
+  "C9":"887f615d6e1253b8f76dd86b588191289e5ed9b17ae615a6cb97b80b10f07be8"
+};
+const KEY="hashheist.scores.v1";
+const $=s=>document.querySelector(s);
+
+async function sha256(str){
+  const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function load(){ try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}} }
+function save(d){ localStorage.setItem(KEY,JSON.stringify(d)); }
+
+function whichChallenge(hash){
+  for(const [c,h] of Object.entries(FLAG_HASHES)) if(h===hash) return c;
+  return null;
+}
+
+async function submit(){
+  const player=$("#player").value.trim();
+  const raw=$("#flag").value.trim();
+  const msg=$("#msg");
+  if(!player){ msg.className="msg err"; msg.textContent="Enter your name / team first."; return; }
+  if(!raw){ msg.className="msg err"; msg.textContent="Enter a flag."; return; }
+  const norm=raw.replace(/\s+/g,"");           // tolerate stray spaces
+  const c=whichChallenge(await sha256(norm));
+  if(!c){ msg.className="msg err"; msg.textContent="❌ Not a valid flag. Format: DC256{...}"; return; }
+  const data=load();
+  data[player]=data[player]||{solved:[]};
+  if(data[player].solved.includes(c)){
+    msg.className="msg info"; msg.textContent=`ℹ ${player} already solved ${c} (${CHALLENGES[c].name}).`;
+  }else{
+    data[player].solved.push(c); save(data);
+    msg.className="msg ok"; msg.textContent=`✅ ${c} — ${CHALLENGES[c].name}! +${CHALLENGES[c].pts} pts for ${player}.`;
+    $("#flag").value="";
+  }
+  render(player);
+}
+
+function score(rec){ return rec.solved.reduce((s,c)=>s+(CHALLENGES[c]?.pts||0),0); }
+
+function render(me){
+  const data=load();
+  const rows=Object.entries(data)
+    .map(([name,rec])=>({name,pts:score(rec),solved:rec.solved.slice().sort()}))
+    .sort((a,b)=>b.pts-a.pts||a.name.localeCompare(b.name));
+  const tb=$("#board tbody"); tb.innerHTML="";
+  const medals=["🥇","🥈","🥉"];
+  rows.forEach((r,i)=>{
+    const tr=document.createElement("tr");
+    if(r.name===me) tr.className="me";
+    const pills=r.solved.map(c=>`<span class="pill solved">${c}</span>`).join("")||'<span class="pill">—</span>';
+    tr.innerHTML=`<td class="rank">${medals[i]||(i+1)}</td><td>${escapeHtml(r.name)}</td>
+                  <td>${pills}</td><td class="pts">${r.pts}</td>`;
+    tb.appendChild(tr);
+  });
+  if(!rows.length) tb.innerHTML='<tr><td colspan="4" style="color:var(--muted)">No flags yet — be First Blood!</td></tr>';
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+
+$("#submit").onclick=submit;
+$("#flag").addEventListener("keydown",e=>{if(e.key==="Enter")submit();});
+$("#reset").onclick=()=>{ if(confirm("Clear the whole scoreboard?")){localStorage.removeItem(KEY);render();} };
+$("#projector").onclick=()=>{ document.body.classList.toggle("big"); };
+$("#export").onclick=()=>{
+  const data=load();
+  let csv="player,points,solved\n";
+  Object.entries(data).forEach(([n,r])=>{csv+=`"${n}",${score(r)},"${r.solved.join(' ')}"\n`;});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download="hashheist-scores.csv"; a.click();
+};
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cracking the Code — Hash Heist · DC256 × NAC-ISSA</title>
+<meta name="description" content="Hash Heist: the password-cracking CTF from the 'Cracking the Code' class. Live leaderboard, challenge ladder, and Dillon's Cookie Shop.">
+<style>
+  :root{
+    --green:#5FE085; --green-bright:#7CFFA0; --teal:#31A7CC; --gold:#E0A93B;
+    --ink:#0B0E14; --panel:#161B26; --cloud:#F4F7FB; --danger:#E5484D; --muted:#9AA4B8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--cloud);
+       font-family:Inter,Segoe UI,system-ui,sans-serif;line-height:1.55}
+  a{color:var(--green)}
+  header.hero{
+    text-align:center;padding:3rem 1.25rem 2rem;
+    border-bottom:2px solid var(--green);
+    background:radial-gradient(circle at 50% -20%,rgba(95,224,133,.14),transparent 60%);
+  }
+  header.hero h1{font-size:2.4rem;margin:.2rem 0;letter-spacing:.5px}
+  header.hero h1 .accent{color:var(--green)}
+  header.hero .sub{color:var(--muted);max-width:640px;margin:.6rem auto 0;font-size:1.02rem}
+  header.hero .brand{color:var(--gold);font-size:.85rem;margin-top:1rem;letter-spacing:.5px}
+  main{max-width:1000px;margin:0 auto;padding:1.5rem 1.25rem 3rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin:1.5rem 0}
+  .tile{background:var(--panel);border:1px solid #232a3a;border-radius:14px;padding:1.25rem;
+        display:flex;flex-direction:column;gap:.4rem;text-decoration:none;color:var(--cloud);
+        transition:border-color .15s,transform .15s}
+  .tile:hover{border-color:var(--green);transform:translateY(-2px)}
+  .tile .ico{font-size:1.6rem}
+  .tile h3{margin:.1rem 0;font-size:1.1rem;color:var(--green-bright)}
+  .tile p{margin:0;color:var(--muted);font-size:.9rem}
+  .tile .url{margin-top:.3rem;font-family:Consolas,monospace;font-size:.78rem;color:var(--teal)}
+  section{background:var(--panel);border:1px solid #232a3a;border-radius:14px;padding:1.25rem 1.5rem;margin:1.25rem 0}
+  h2{color:var(--teal);font-size:1.2rem;margin:.2rem 0 1rem}
+  code,pre{font-family:Consolas,Menlo,monospace}
+  code{background:#0d111a;border:1px solid #2c3548;border-radius:5px;padding:1px 5px;color:var(--green-bright);font-size:.85em}
+  pre{background:#0d111a;border:1px solid #2c3548;border-radius:10px;padding:1rem;overflow-x:auto;font-size:.85rem;color:var(--cloud)}
+  table{width:100%;border-collapse:collapse;margin-top:.5rem;font-size:.92rem}
+  th,td{text-align:left;padding:.5rem .55rem;border-bottom:1px solid #232a3a;vertical-align:top}
+  th{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px}
+  td.id{color:var(--gold);font-weight:700;white-space:nowrap}
+  td.pts{color:var(--green);font-weight:700;text-align:right}
+  .lab-banner{background:#1a1407;border:1px solid var(--gold);color:var(--gold);
+    border-radius:10px;padding:.7rem 1rem;font-size:.85rem;margin:1rem 0}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;padding:2rem 1.25rem;border-top:1px solid #232a3a}
+  @media(max-width:600px){header.hero h1{font-size:1.8rem}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1><span class="accent">#</span> Cracking the Code <span class="accent">// Hash Heist</span></h1>
+  <p class="sub">Learn how passwords are stored, why some hashes fall in seconds while others resist
+  for centuries, and how the same tools attackers use make you a sharper defender — in a safe,
+  local lab.</p>
+  <div class="brand">DC256 × NAC-ISSA · Tech Thursdays · presented by Christian Clark</div>
+</header>
+
+<main>
+  <div class="grid">
+    <a class="tile" href="https://board.0byte.sh/">
+      <div class="ico">🏆</div>
+      <h3>Live Leaderboard</h3>
+      <p>Submit your <code>DC256{…}</code> flags and watch the shared board update in real time.</p>
+      <div class="url">board.0byte.sh</div>
+    </a>
+    <a class="tile" href="https://board.0byte.sh/projector">
+      <div class="ico">📺</div>
+      <h3>Projector View</h3>
+      <p>Big-screen, auto-refreshing leaderboard for the room.</p>
+      <div class="url">board.0byte.sh/projector</div>
+    </a>
+    <a class="tile" href="https://cookies.0byte.sh/">
+      <div class="ico">🍪</div>
+      <h3>Dillon's Cookie Shop</h3>
+      <p>Challenge <strong>C9</strong> — brute-force the staff login with Hydra to unlock the recipe.</p>
+      <div class="url">cookies.0byte.sh</div>
+    </a>
+    <a class="tile" href="scoreboard.html">
+      <div class="ico">🧪</div>
+      <h3>Solo Practice Board</h3>
+      <p>Practice anytime — scores stay in <em>your</em> browser. Not the shared class board.</p>
+      <div class="url">0byte.sh/scoreboard.html</div>
+    </a>
+    <a class="tile" href="challenges.html">
+      <div class="ico">🪜</div>
+      <h3>Challenge Ladder</h3>
+      <p>All 11 challenges, hints, and point values — from Script Kiddie to Hash Lord.</p>
+      <div class="url">0byte.sh/challenges.html</div>
+    </a>
+    <a class="tile" href="https://github.com/bytetheio/crackstation">
+      <div class="ico">🐳</div>
+      <h3>The Lab (Docker)</h3>
+      <p>The <code>crackstation</code> toolbox image: John, Hashcat, Hydra, rockyou, rules — all staged.</p>
+      <div class="url">github.com/bytetheio/crackstation</div>
+    </a>
+  </div>
+
+  <section>
+    <h2>60-second quick start</h2>
+    <p>Install Docker, then drop into the fully-staged cracking station — hashes, wordlists, rockyou,
+    rules, and the Hydra target are all pre-loaded:</p>
+<pre>git clone https://github.com/bytetheio/crackstation
+cd crackstation
+docker compose pull            # or: docker compose build
+docker compose up -d vuln-login
+docker compose run --rm crackstation
+
+# Your first crack (Challenge 1):
+john --format=raw-md5 -w $ROCKYOU /lab/sample-hashes/c1_md5.txt
+john --show --format=raw-md5 /lab/sample-hashes/c1_md5.txt
+# -> recover the password, wrap it as DC256{...}, submit it at board.0byte.sh</pre>
+    <p>For the C9 web challenge (Dillon's Cookie Shop), use the internet-enabled toolbox:</p>
+<pre>docker compose run --rm crackstation-web
+hydra -l dillon -P /lab/wordlists/cookie-wordlist.txt cookies.0byte.sh -s 443 \
+  https-post-form "/login:username=^USER^&password=^PASS^:F=Invalid credentials"</pre>
+  </section>
+
+  <div class="lab-banner">
+    ⚖️ <strong>Lab only.</strong> Everything here runs against <strong>synthetic data we created</strong> —
+    toy hashes, fake users, deliberately weak passwords. Dillon's Cookie Shop is an authorized class
+    target. Cracking passwords or logins you don't own or have written permission to test is illegal.
+    Keep it in the lab.
+  </div>
+
+  <section>
+    <h2>How scoring works</h2>
+    <ul>
+      <li>Crack a hash → recover the password → that's your flag, wrapped as <code>DC256{...}</code>.</li>
+      <li>Submit flags on the <a href="https://board.0byte.sh/">live leaderboard</a>. Correct flag → points.</li>
+      <li>Hints cost points (listed per challenge) — but learning beats hoarding points.</li>
+      <li>Top solo and top team win. The <a href="challenges.html">challenge ladder</a> has the details.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  Cracking the Code · Hash Heist · DC256 × NAC-ISSA · Tech Thursdays<br>
+  Teaching materials CC BY 4.0 · lab code MIT · third-party tools retain their own licenses.
+</footer>
+</body>
+</html>

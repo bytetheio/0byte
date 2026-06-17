@@ -1,0 +1,11 @@
+# Dillon's Cookie Shop (C9) — Cloudflare Worker
+# Deploy:  cd cloudflare/cookies && wrangler deploy
+name = "dillons-cookie-shop"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+workers_dev = true            # dillons-cookie-shop.<subdomain>.workers.dev for testing
+
+# Custom domain: cookies.0byte.sh (wrangler creates the DNS record on deploy).
+[[routes]]
+pattern = "cookies.0byte.sh"
+custom_domain = true
